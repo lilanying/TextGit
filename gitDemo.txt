@@ -1,0 +1,98 @@
+#写在前面的话:
+    如果你的机器之前已经使用过git了 或者已经生成了ssh key则不需要创建ssh key
+
+使用命令 
+git config -l #就可以看见本地的git配置 
+
+
+如果没有则执行下面这段
+打开Git Bash,创建SSH key:
+ssh-keygen -C 'your@email.address' -t rsa
+确认使用默认路径，然后输入两次你要是用的密码就行。我默认直接“Enter”
+git config  --global user.name = "用户名"
+git config  --global user.email = "邮箱"  #有了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置，当然你也可以对某个仓库指定的不同的用户名和邮箱。
+提交密匙
+1、到github的页面上，在右上方工具栏里找到“Settings”。
+2、在这个页面上有一个“SSH  Keys”标签
+3、选择“Add SSH key”。
+4、Title随便取，如果存在多个要确认唯一。找到刚才创建密匙的那个目录下（默认是C:\Users\你的windows用户名\.ssh）找到id_rsa.pub文件，把它打开可以看到一堆文字，拷贝下来黏贴到github页面key的空白处。
+5、然后“Add key”。
+验证一下是否设置成功
+,在git bash下输入如下命令：
+ssh –T git@github.com
+
+
+originName 可以自己指定 默认为origin
+本地添加github项目地址
+1、打开github仓库url，复制SSH clone URL；
+2、打开Git Bash进入之前创建的项目目录；
+3、执行git remote add originName git@github.com:Hey-stone/local.git   (如果报错要在项目更目录下输入 git init 一下)
+在本地同步仓库的内容
+git pull originName master 
+提交文件
+git add .      #  . 提交所有文件 如果想提交指定的文件，可以写文件名，执行完增加命令后
+git commit –m “Test commit” #提交命令
+git push originName master #推送
+下载项目
+git clone git@github.com:Hey-stone/project.git #克隆到当前文件夹
+提交文件之前查看状态
+git status
+
+git log #查看提交日志
+git reflog #查看提交的版本号
+git reset  --hard 版本号 #回到这个版本
+git reset  --hard HEAD^ #回到上个版本
+git reset  --hard HEAD^^ #回到上上个版本
+git diff fileName #查看文件改变的内容
+
+git fetch和git pull的区别
+1. git fetch：相当于是从远程获取最新版本到本地，不会自动merge   #推荐使用
+git fetch origin master:tmp
+git diff tmp 
+git merge tmp
+从远程获取最新的版本到本地的tmp分支上
+   之后再进行比较合并
+2. git pull：相当于是从远程获取最新版本并merge到本地
+git pull [origin master] #有可能产生冲突或者把自己本地的文件覆盖了
+
+冲突了将本地的代码回退到上个版本
+git checkout HEAD fileName 
+或者
+git reflog #查看提交的版本号
+git reset  --hard 版本号 #回到这个版本
+git reset  --hard HEAD^ #回到上个版本
+git reset  --hard HEAD^^ #回到上上个版本
+
+如果要指定帐号提交到git
+在当前的git仓库，执行
+git config user.name "fengyajun"
+git config user.email "fyj_style@163.com"
+这两条命令即可。
+这样在这个夹子下面提交到git的用户就是fyj_style@163.com 帐号对应的用户名了.
+
+
+
+参入别人的项目
+先fork别人的项目
+
+git clone 在自己页面看到的地址
+
+ 添加与原始库的关联，命名为upstream，此地址是原项目开发者的项目主页上的clone的地址：这是专门用来与主开发者保持相同进度的方法：
+git remote add upstream 别人的地址   #upstream自己取的
+
+从原始库中抓取最新的更新  
+git fetch upstream
+git merge upstream
+在本地修改代码文件并PUSH
+git commit -a -m ’更新原因'  
+git push 自己的地址 
+
+然后去git页面
+发送pull request给主开发者
+
+ 
+
+
+同理如果需要更新作者的更新
+
+

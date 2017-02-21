@@ -1,0 +1,136 @@
+####写在前面的话 Linux简单常用命令#####
+cd 目录切换
+cp old new 复制命令
+mv originDir newDir 移动
+rm 删除
+mkdir 创建目录
+touch 创建文件
+su 切换用户
+sudo 临时使用超级用户权限
+tail,cat,vi,more,less 文件内容查看
+ls 显示目录里面的内容
+ls -a显示内容包括隐藏文件
+ls -l 长格式显示
+ps 查看进程号
+chmod chown 改变权限
+top查看服务器使用情况
+ifconfig 查看ip
+
+vi  中撤销上一步操作
+      u 撤销上一步的操作
+      Ctrl+r 恢复上一步被撤销的操作
+
+    复制操作
+      复制整行
+       命令模式下，光标位于要复制的当前行，输入 yy 
+      复制一个单词
+       命令模式下，光标位于要复制的当前单词的第一个字母，输入 yw
+
+    #yy例如：5yy就是复制5行
+　　#yw例如：2yw就是复制两个单词
+    如果要复制第m行到第n行之间的内容，可以在末行模式中输入m，ny例如：3，5y复制第三行到第五行内容到缓存区。
+
+    需要编辑 在命令模式下输入 a
+    
+    粘贴操作   p
+
+    删除整行  光标位于要删除的所在行，输入 dd
+    删除一个单词  光标位于要删除的单词的第一个字母，输入 dw  删除5个单词 d5w
+
+    跳到多少行  输入 要跳转的行数，然后再输入 gg eg:200gg  跳到200行
+ 
+    显示vi的行号：在vim命令行模式下输入  ：set nu
+
+    取消显示：在vim命令行模式下输入：  set nonu
+
+    在 vi里面查找字符串 / ""  如果要继续向下查找 n
+
+删除当前文件夹下面 除zhang文件之外所有的文件  ls |grep -v zhang |xargs rm -rf
+
+将当前服务器上的文件复制到121.41.73.191服务器上
+scp 【-P 端口号】 -r config/ dbconfig/ configVersionYingyonghui/ spider.jar lib/ versionYingyonghui/ work@121.41.73.191:/root/java-spider/spider/
+
+服务器查看异常:
+tail -200f nohup.out
+tail -200000f nohup.out | grep page
+
+以方便阅读的大小单位显示本地文件系统信息：
+df -lh
+
+在root用户下，将work用户的jar包copy到root用户的文件夹下
+cp -pr jk.jar /root/java-spider/jk/
+
+rsync /root/undertow root@10.168.13.89:/root/undertowKeyWord
+
+rsync jk_db.conf root@10.117.78.246:/root/jk/dbconfig
+
+寻找某一文件或目录
+find / -name coolweb_collection_data_ios  -type d # 在根目录下查找coolweb_collection_data_ios 类型是文件
+
+(1)find /tmp -size +10000c -and -mtime +2 　　#在/tmp目录下查找大于10000字节并在最后2分钟内修改的文件
+(2)find / -user fred -or -user george 　　#在/目录下查找用户是fred或者george的文件文件
+(3)find /tmp ! -user panda　　#在/tmp目录中查找所有不属于panda用户的文件
+
+文件中查找关键字
+cat 文件 | grep 关键字
+grep "关键字" 文件名
+
+查看服务器信息
+cat /proc/meminfo
+
+清空nohup.out文件里面的内容
+echo "" > nohup.out
+
+查看登录用户下的定时任务  
+crontab -l
+<格式 ：    2    0    *   *   *      表示：每天00:02执行
+           分、小时、天、月、星期>
+注：这是Linux定时任务，非Quartz框架的定时任务
+
+
+查看目录大小
+du -sh
+
+定时任务
+* * * * * /bin/sh /root/jk/runSearchKeyWordJedisImpl.sh
+
+
+服务器邮件查看
+112.124.126.39
+邮件地址：/var/mail/root   服务器监控脚本：/root/spider/runMonitor.sh
+
+查看服务进程 包含Java关键字的进程号
+ps -ef | grep java
+
+1、Ctrl+C比较暴力，就是发送Terminal到当前的程序，比如你正在运行一个查找功能，文件正在查找中，Ctrl+C就会强制结束当前的这个进程。
+2、Ctrl+Z是把当前的程序挂起，暂停执行这个程序，比如你正在mysql终端中，需要出来搞点其他的文件操作，又不想退出mysql终端（因为下次还得输入用户名密码进入，挺麻烦），于是可以ctrl+z将mysql挂起，然后进行其他操作，然后输入fg回车后就可以回来，当然可以挂起好多进程到后台，然后fg 加编号就能把挂起的进程返回到前台。当然，配合bg和fg命令进行前后台切换会非常方便。
+3、Ctrl+D 是发送一个exit信号，没有那么强烈，类似ctrl+C的操作，比如你从管理员root退回到你的普通用户就可以这么用。
+
+
+#查看nohup.out文件中 queryAuthor appid:null  出现的次数
+grep -o "queryAuthor appid:null"  nohup.out|wc -l
+:%s/objStr//gn
+
+如果是多个字符串出现次数，可使用：
+grep -o ‘objStr1\|objStr2'  filename|wc -l  #直接用\| 链接起来即可
+
+jstack pid  查看java 运行的异常 
+
+cat /proc/meminfo |grep MemTotal  看内存大小
+
+改变文件的用户
+chown [-R] 账号名称 文件或目录
+chown [-R] 账号名称:用户组名称 文件或目录
+chgrp [-R] 用户组名称 dirname/filename ...
+
+看进程的启动时间（程序运行了多长时间）
+ps -eo pid,lstart,etime | grep 14045
+
+
+使用jps命令查看java进程，经常出现类似"3135 -- process information unavailable".
+有两种情况，第一种：3135这个PID存在，原因为当前ID为其他用户启动，该用户没有查看权限。第二种：3135这个PID不存在。
+             tmp/hsperfdata_用户名/PID
+rm -rf  /tmp/hsperfdata_work/5796
+
+ 
+
